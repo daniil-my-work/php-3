@@ -53,4 +53,9 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Film::class);
     }
+
+    public function role(): BelongsToMany
+    {
+        return $this->belongsToMany(Role::class, 'roles_users');
+    }
 }

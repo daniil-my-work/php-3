@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Comment;
 use Illuminate\Http\Request;
 
 class CommentController extends Controller
@@ -33,8 +34,10 @@ class CommentController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Comment $comment)
     {
-        return response()->json([]);
+        $comment = Comment::find($comment);
+        $comment->delete($comment->id);
+        return $this->success(['message' => "Комментарий $comment->id успешно удален", 200]);
     }
 }
