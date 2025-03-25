@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Comment extends Model
 {
-    use SoftDeletes, HasFactory;
+    use HasFactory;
 
     protected $table = 'comments';
 
@@ -22,9 +22,11 @@ class Comment extends Model
     ];
 
     protected $fillable = [
-        'comment',
+        'text',
         'rating',
+        'film_id',
         'user_id',
+        'parent_id',
     ];
 
     protected $append = [
@@ -47,6 +49,6 @@ class Comment extends Model
 
     public function getAuthorAttribute()
     {
-        return $this->user()->name ?? "Гость";
+        return $this->user->name ?? "Гость";
     }
 }

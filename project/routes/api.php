@@ -80,8 +80,8 @@ Route::controller(CommentController::class)
         Route::middleware('auth:sanctum')
             ->group(function () {
                 Route::post('{id}', 'store')->name('store');
-                Route::patch('{comment}', 'update')->name('update');
-                Route::delete('{comment}', 'destroy')->name('destroy');
+                Route::patch('{id}', 'update')->name('update');
+                Route::delete('{id}', 'destroy')->name('destroy');
             });
     });
 
