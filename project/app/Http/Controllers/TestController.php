@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Film;
 use Illuminate\Http\Request;
 
 class TestController extends Controller
@@ -20,4 +21,12 @@ class TestController extends Controller
     // Раунд 4: 6.5/10 (связи) УРА.
 
     public function test() {}
+
+    public function index(Request $request)
+    {
+        // $result = Film::find(100)->scores()->get()->toArray();
+        $result = Film::find(1)->getRatingAttribute();
+        var_dump($result);
+        // return $result;
+    }
 }
