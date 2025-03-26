@@ -22,14 +22,14 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Gate::define('delete-comment', function (User $user) {
-            if ($user->role()->first()['role_value'] === 'moderator') {
+        Gate::define('destroy_comment', function (User $user) {
+            if ($user->isModerator()) {
                 return true;
             }
         });
 
-        Gate::define('edit-comment', function (User $user, Comment $comment) {
-            if ($user->role->first()['role_value'] === 'moderator') {
+        Gate::define('update_comment', function (User $user, Comment $comment) {
+            if ($user->isModerator()) {
                 return true;
             }
 

@@ -6,7 +6,6 @@ use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\FilmController;
 use App\Http\Controllers\GenreController;
 use App\Http\Controllers\PromoController;
-use App\Http\Controllers\TestController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -96,4 +95,3 @@ Route::controller(PromoController::class)
 
 
 // => MY TEST Routes
-// Route::get('/test', [TestController::class, 'test'])->name("test.test");

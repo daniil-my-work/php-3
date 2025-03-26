@@ -29,7 +29,7 @@ class Comment extends Model
         'parent_id',
     ];
 
-    protected $append = [
+    protected $appends = [
         'author'
     ];
 
@@ -49,6 +49,6 @@ class Comment extends Model
 
     public function getAuthorAttribute()
     {
-        return $this->user->name ?? "Гость";
+        return $this->user?->name ?? "Гость";
     }
 }

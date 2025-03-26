@@ -1,7 +1,5 @@
 <?php
 
-use App\Models\Role;
-use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -13,11 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('roles_users', function (Blueprint $table) {
+        Schema::create('roles', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(User::class)->constrained()->onDelete('cascade');
-            $table->foreignIdFor(Role::class)->constrained()->onDelete('cascade');
-            $table->timestamps();
+            $table->string('role_name')->default('Участник');
+            $table->string('role_value')->default('member');
+            $table->timestampsTz();
         });
     }
 
@@ -26,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('roles_users');
+        Schema::dropIfExists('roles');
     }
 };

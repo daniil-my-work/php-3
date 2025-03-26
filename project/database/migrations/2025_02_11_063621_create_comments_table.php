@@ -20,7 +20,6 @@ return new class extends Migration
             $table->foreignIdFor(Film::class)->constrained();
             $table->foreignIdFor(User::class)->nullable()->constrained();
             $table->unsignedBigInteger('parent_id')->nullable()->constrained('comments');
-            // $table->softDeletesTz();
             $table->timestampsTz();
         });
     }

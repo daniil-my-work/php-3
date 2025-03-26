@@ -17,8 +17,7 @@ class DatabaseSeeder extends Seeder
             GenreSeeder::class,
             RelationSeeder::class,
             UserSeeder::class,
-            RoleSeeder::class,
-            RoleUserSeeder::class,
+            RoleSeeder::class
         ]);
     }
 }
