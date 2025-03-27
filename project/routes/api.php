@@ -56,7 +56,7 @@ Route::controller(GenreController::class)
     ->name('genres.')
     ->group(function () {
         Route::get('/', 'index')->name('index');
-        Route::patch('{genre}', 'update')->middleware('auth:sanctum')->name('update');
+        Route::patch('{id}', 'update')->middleware('auth:sanctum')->name('update');
     });
 
 // => Favorite

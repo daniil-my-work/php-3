@@ -24,6 +24,17 @@ class GenreController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        return response()->json([]);
+        $genre = Genre::findOrFail($id);
+
+        $validatedData = $request->validate([
+            'name' => 'string|max:255',
+        ]);
+
+        $genre->update($validatedData);
+
+        return $this->success([
+            'message' => 'Жанр обновлен',
+            'genre' => $genre,
+        ], 200);
     }
 }
