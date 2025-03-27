@@ -3,35 +3,37 @@
 namespace Tests\Unit;
 
 use App\Models\Comment;
+use App\Models\Film;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Hash;
-use PHPUnit\Framework\TestCase;
+use Tests\TestCase;
 
 class CommentModelTest extends TestCase
 {
     use RefreshDatabase;
 
-    /**
-     * A basic unit test example.
-     */
     public function test_comment(): void
     {
-        // $this->assertTrue(true);
-
-        // $user = User::create([
-        //     'name' => 'Тестовое имя',
-        //     'email' => 'test@mail.ru',
-        //     'password' => Hash::make('123456'),
-        // ]);
-
+        // Создаем пользователя
         $user = User::factory()->create([
-            'name' => 'Тестовое имя',
+            'email' => 'test@mail.ru',
         ]);
 
-        $comment = Comment::factory()->create();
+        // Создаем комментарий
+        $film = Film::factory()->create();
+        $comment = new Comment([
+            'text' => "ТЕСТ. Новый комментарий",
+            'rating' => 10,
+            'film_id' => $film->id,
+        ]);
+
+        // Привязываем комментарий к пользователю
         $user->comments()->save($comment);
 
-        
+        // Находим сохраненный комментарий
+        $newComment = Comment::where('text', 'ТЕСТ. Новый комментарий')->first();
+
+        // Проверяем, что комментарий привязан к правильному пользователю
+        $this->assertEquals($newComment->user_id, $user->id);
     }
 }

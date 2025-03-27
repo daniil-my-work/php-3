@@ -29,12 +29,12 @@ class FilmFactory extends Factory
             'preview_video_link' => fake()->url(),
             'description' => fake()->paragraph(3),
             'director' => fake()->name(),
-            'starring' => $this->faker->randomElements([
+            'starring' => json_encode(fake()->randomElements([
                 'Джейсон Стетхем',
                 'Марго Роберт',
                 'Роберт Дауни младший',
                 'Том Круз',
-            ], 3),
+            ], 3)),
             'run_time' => fake()->numberBetween(60, 240),
             'released' => fake()->year(),
             'promo' => fake()->boolean(50),
