@@ -48,10 +48,4 @@ class FilmController extends Controller
     {
         return response()->json([]);
     }
-
-    public function test()
-    {
-        $result = Film::with('comments')->where('id', 154)->get();
-        return $result;
-    }
 }
