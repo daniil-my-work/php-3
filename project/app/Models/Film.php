@@ -37,6 +37,8 @@ class Film extends Model
         'starring',
         'run_time',
         'released',
+        'imdb_id',
+        'status',
     ];
 
     protected $casts = [

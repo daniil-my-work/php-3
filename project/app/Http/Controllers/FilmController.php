@@ -52,7 +52,20 @@ class FilmController extends Controller
 
     public function store(Request $request)
     {
-        return response()->json([]);
+        $validatedData = $request->validate([
+            'imdb_id' => ['required', 'string', 'min:1']
+        ]);
+
+        // Создаем фильм
+        $film = Film::create([
+            'imdb_id' => $validatedData['imdb_id'],
+            'status' => 'pending',
+        ]);
+
+        return $this->success([
+            'message' => "Фильм с ID={$validatedData['imdb_id']} успешно сохранен.",
+            'film' => $film
+        ]);
     }
 
     public function show(Request $request, string $id)
