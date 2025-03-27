@@ -39,7 +39,7 @@ Route::controller(FilmController::class)
     ->name('films.')
     ->group(function () {
         Route::get('/', 'index')->name('index');
-        Route::get('{id}/similar', 'similar')->name('similar');
+        Route::get('/similar/{id}', 'similar')->name('similar');
 
         Route::middleware('auth:sanctum')
             ->group(function () {
