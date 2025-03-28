@@ -6,15 +6,14 @@ use App\Models\Film;
 use App\Models\Genre;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use PHPUnit\Framework\Attributes\Group;
 use Tests\TestCase;
 
-class FilmFunTest extends TestCase
+class FilmTest extends TestCase
 {
     use RefreshDatabase;
 
-    /**
-     * A basic feature test example.
-     */
+    #[Group('functional')]
     public function test_get_films(): void
     {
         $genre = Genre::factory()->create([
@@ -65,6 +64,7 @@ class FilmFunTest extends TestCase
         ]);
     }
 
+    #[Group('functional')]
     public function test_get_similar_film()
     {
         $genre = Genre::factory()->create([
@@ -76,7 +76,7 @@ class FilmFunTest extends TestCase
             $film->genres()->attach($genre->id);
         }
 
-        $response = $this->getJson("/api/films/similar/{$films[0]->id}");
+        $response = $this->getJson("/api/films/{$films[0]->id}/similar");
 
         $response->assertStatus(200);
         $response->assertJsonStructure([
@@ -96,6 +96,7 @@ class FilmFunTest extends TestCase
         ]);
     }
 
+    #[Group('functional')]
     public function test_get_film(): void
     {
         $user = User::factory()->create();
@@ -109,7 +110,7 @@ class FilmFunTest extends TestCase
 
         $response = $this
             ->withHeader('Authorization', "Bearer {$token}")
-            ->getJson("api/films/{$film->id}");
+            ->getJson("/api/films/{$film->id}");
 
         $response->assertStatus(200);
         $response->assertJsonStructure([
@@ -124,6 +125,37 @@ class FilmFunTest extends TestCase
             'data' => [
                 'film' => $film->toArray()
             ]
+        ]);
+    }
+
+    #[Group('functional')]
+    public function test_update_film()
+    {
+        $user = User::factory()->create();
+        $token = $user->createToken('auth-token')->plainTextToken;
+
+        $film = Film::factory()->create([
+            'name' => 'Good day',
+            'poster_image' => 'test-1'
+        ]);
+
+        $response = $this->withHeaders([
+            'Authorization' => "Bearer {$token}"
+        ])->patchJson("/api/films/{$film->id}", [
+            'name' => 'Good day',
+            'poster_image' => 'test-2'
+        ]);
+
+        $response->assertStatus(200);
+        $response->assertJsonStructure([
+            "data" => [
+                'message',
+                'updated_film' => []
+            ]
+        ]);
+
+        $response->assertJsonFragment([
+            'poster_image' => 'test-2'
         ]);
     }
 }

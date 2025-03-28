@@ -3,10 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Comment;
+use App\Models\Film;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\Log;
 
 class CommentController extends Controller
 {
@@ -15,7 +14,19 @@ class CommentController extends Controller
      */
     public function index(Request $request, string $id)
     {
-        return response()->json([]);
+        $film = Film::with('comments')->findOrFail($id);
+
+        $filterComments = array_map(function ($comment) {
+            return [
+                'text' => $comment['text'],
+                'rating' => $comment['rating'],
+                'author' => $comment['author'],
+            ];
+        }, $film->comments->toArray());
+
+        return $this->success([
+            'comments' => $filterComments
+        ]);
     }
 
     /**
@@ -23,7 +34,27 @@ class CommentController extends Controller
      */
     public function store(Request $request, string $id)
     {
-        return response()->json([]);
+        $validatedData = $request->validate([
+            'text' => ['required', 'string', 'min:50'],
+            'rating' => ['required', 'int', 'min:1', 'max:9'],
+            'comment_id' => ['int'],
+            'film_id' => ['int'],
+        ]);
+
+        $film = Film::find($id);
+
+        $comment = Comment::create([
+            'text' => $validatedData['text'],
+            'rating' => $validatedData['rating'],
+            'comment_id' => $validatedData['comment_id'],
+            'film_id' => $film->id,
+        ]);
+
+        $film->fresh('comments');
+        return $this->success([
+            'message' => "Успешно добавлен комментарий ID = {$comment->id}",
+            'film' => $film->comments,
+        ]);
     }
 
     /**

@@ -77,11 +77,23 @@ class FilmController extends Controller
         ], 200);
     }
 
-    public function update(Request $request)
+    public function update(Request $request, string $id)
     {
+        $validatedData = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'poster_image' => ['string', 'max:255'],
+            'preview_image' => ['string', 'max:255'],
+            'background_image' => ['string', 'max:255'],
+            'background_color' => ['string', 'max:9'],
+        ]);
 
+        $film = Film::findOrFail($id);
+        $film->update($validatedData);
 
-        return response()->json([]);
+        return $this->success([
+            'message' => 'Фильм успешно обновлен.',
+            'updated_film' => $film
+        ]);
     }
 
     public function similar(Request $request, string $id)

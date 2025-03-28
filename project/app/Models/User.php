@@ -65,7 +65,7 @@ class User extends Authenticatable
         $user = Auth::user();
 
         if ($user) {
-            return $user->role()->where('role_value', 'moderator')->exists();
+            return $user->role->where('role_value', 'moderator')->exists();
         }
 
         return false;
