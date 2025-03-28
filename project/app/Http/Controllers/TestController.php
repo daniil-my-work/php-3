@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Film;
+use App\Services\class\FilmRepository;
+use App\Services\class\FilmService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 
 class TestController extends Controller
 {
@@ -28,5 +31,15 @@ class TestController extends Controller
         $result = Film::find(1)->getRatingAttribute();
         var_dump($result);
         // return $result;
+    }
+
+    public function storeFilm()
+    {
+        $client = new Http();
+
+        $repository = new FilmRepository($client);
+        $filmService = new FilmService($repository);
+        $result = $filmService->getFilm('123');
+        return $result;
     }
 }
