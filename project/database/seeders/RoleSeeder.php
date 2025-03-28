@@ -22,10 +22,10 @@ class RoleSeeder extends Seeder
             $isModerator = rand(0, 1) === 1;
 
             if ($isModerator) {
-                $user->role()->attach($moderatorRole->id);
+                $user->roles()->attach($moderatorRole->id);
             }
 
-            $user->role()->attach($memberRole->id);
+            $user->roles()->attach($memberRole->id);
         }
     }
 }

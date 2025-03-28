@@ -55,7 +55,7 @@ class User extends Authenticatable
         return $this->belongsToMany(Film::class);
     }
 
-    public function role(): BelongsToMany
+    public function roles(): BelongsToMany
     {
         return $this->belongsToMany(Role::class, 'role_user');
     }
@@ -65,7 +65,7 @@ class User extends Authenticatable
         $user = Auth::user();
 
         if ($user) {
-            return $user->role->where('role_value', 'moderator')->exists();
+            return $user->roles()->where('role_value', 'moderator')->exists();
         }
 
         return false;

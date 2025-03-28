@@ -67,18 +67,21 @@ class CommentController extends Controller
             abort(404, 'Комментарий не найден');
         }
 
-        if (!Gate::allows('edit-comment', $comment)) {
+        if (!Gate::allows('update_comment', $comment)) {
             abort(403, 'Комментарий может редактировать только модератор или сам пользователь');
         }
 
         $validatedData = $request->validate([
             'text' => 'string',
+            'rating' => 'int',
         ]);
 
-        $comment->fill($validatedData);
-        $comment->save();
+        $comment->update($validatedData);
 
-        return $this->success(['message' => "Комментарий {$id} успешно отредактирован"], 200);
+        return $this->success([
+            'message' => "Комментарий {$id} успешно отредактирован",
+            "comment" => $comment
+        ], 200);
     }
 
     /**
@@ -87,7 +90,7 @@ class CommentController extends Controller
     public function destroy(Request $request)
     {
         $comment = Comment::find($request->id);
-        if (!Gate::allows('delete-comment')) {
+        if (!Gate::allows('destroy_comment')) {
             abort(403, 'Комментарий может удалить только модератор.');
         }
 
@@ -96,6 +99,9 @@ class CommentController extends Controller
         }
 
         $comment->delete();
-        return $this->success(['message' => "Комментарий {$comment->id} успешно удален"], 200);
+        return $this->success(
+            ['message' => "Комментарий {$comment->id} успешно удален"],
+            200
+        );
     }
 }
