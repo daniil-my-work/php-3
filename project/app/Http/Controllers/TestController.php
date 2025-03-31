@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Jobs\SaveFilmJob;
 use App\Models\Film;
+use App\Services\class\client\LaravelHttpClient;
+use App\Services\class\FilmRepository;
+use App\Services\class\FilmService;
 use Illuminate\Http\Request;
 
 class TestController extends Controller
@@ -32,7 +35,14 @@ class TestController extends Controller
 
     public function storeFilm(Request $request)
     {
-        SaveFilmJob::dispatch($request->id);
-        return $this->success(['message' => "Задача на сохранение фильма {$request->id} отправлена в очередь."], 201);
+        // Сохранение без очереди напрямую
+        $client = new LaravelHttpClient();
+        $filmsRepository = new FilmRepository($client);
+        $filmService = new FilmService($filmsRepository);
+        $film = $filmsRepository->getFilm($request->id);
+        $filmService->saveFilm($film);
+
+        // SaveFilmJob::dispatch($request->id);
+        // return $this->success(['message' => "Задача на сохранение фильма {$request->id} отправлена в очередь."], 201);
     }
 }
