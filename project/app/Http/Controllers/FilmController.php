@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\SaveFilmJob;
 use App\Models\Film;
 use Illuminate\Http\Request;
 
@@ -56,15 +57,11 @@ class FilmController extends Controller
             'imdb_id' => ['required', 'string', 'min:1']
         ]);
 
-        // Создаем фильм
-        $film = Film::create([
-            'imdb_id' => $validatedData['imdb_id'],
-            'status' => 'pending',
-        ]);
+        // Создает задачу на добавления фильма
+        SaveFilmJob::dispatch($validatedData['imdb_id']);
 
         return $this->success([
-            'message' => "Фильм с ID={$validatedData['imdb_id']} успешно сохранен.",
-            'film' => $film
+            'message' => "Добавлена задача на сохранение фильма с ID={$validatedData['imdb_id']}.",
         ]);
     }
 

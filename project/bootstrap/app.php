@@ -1,5 +1,6 @@
 <?php
 
+use App\Console\Handler as ScheduleHandler;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -20,7 +21,7 @@ return Application::configure(basePath: dirname(__DIR__))
             // SubstituteBindings::class
         ]);
     })
+    ->withSchedule(new ScheduleHandler())
     ->withExceptions(function (Exceptions $exceptions) {
-        //
-    })->create();
- 
+    })
+    ->create();
