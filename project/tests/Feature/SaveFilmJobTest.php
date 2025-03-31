@@ -46,7 +46,7 @@ class SaveFilmJobTest extends TestCase
         $filmService = new FilmService($filmRepository);
 
         /** @var FilmService $filmService */
-        (new SaveFilmJob('tt0111161'))->handle($filmRepository, $filmService);
+        (new SaveFilmJob('tt0111161'))->handle($filmService);
 
         // Проверка, что фильм был добавлен в БД
         $this->assertDatabaseHas('films', [

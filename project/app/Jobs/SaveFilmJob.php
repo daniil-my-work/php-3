@@ -33,11 +33,10 @@ class SaveFilmJob implements ShouldQueue
     /**
      * Execute the job.
      */
-    public function handle(FilmRepository $filmRepository, FilmService $filmService): void
+    public function handle(FilmService $filmService): void
     {
         try {
-            $film = $filmRepository->getFilm($this->imdb_id);
-            $filmService->saveFilm($film);
+            $filmService->saveFilm($this->imdb_id);
             Log::info("Фильм с ID {$this->imdb_id} успешно сохранён.");
         } catch (\Throwable $th) {
             Log::error(
