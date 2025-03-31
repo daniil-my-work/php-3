@@ -2,11 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\SaveFilmJob;
 use App\Models\Film;
-use App\Services\class\FilmRepository;
-use App\Services\class\FilmService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Http;
 
 class TestController extends Controller
 {
@@ -27,19 +25,14 @@ class TestController extends Controller
 
     public function index(Request $request)
     {
-        // $result = Film::find(100)->scores()->get()->toArray();
         $result = Film::find(1)->getRatingAttribute();
         var_dump($result);
         // return $result;
     }
 
-    public function storeFilm()
+    public function storeFilm(Request $request)
     {
-        $client = new Http();
-
-        $repository = new FilmRepository($client);
-        $filmService = new FilmService($repository);
-        $result = $filmService->getFilm('123');
-        return $result;
+        SaveFilmJob::dispatch($request->id);
+        return $this->success(['message' => "Задача на сохранение фильма {$request->id} отправлена в очередь."], 201);
     }
 }

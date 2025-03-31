@@ -2,20 +2,21 @@
 
 namespace App\Services\class;
 
+use App\Services\class\client\LaravelHttpClient;
+use App\Services\interfaces\IHttpClient;
 use App\Services\interfaces\IRepository;
-use Psr\Http\Client\ClientInterface;
 
 class FilmRepository implements IRepository
 {
-    private $client;
+    private $httpClient;
 
-    public function __construct(ClientInterface $client)
+    public function __construct(IHttpClient $client)
     {
-        $this->client = $client;
+        $this->httpClient = $client;
     }
 
     public function getFilm(string $imdb_id)
     {
-        return $this->client->get($imdb_id);
+        return $this->httpClient->request($imdb_id);
     }
 }
