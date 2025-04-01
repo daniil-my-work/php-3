@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Jobs\SaveFilmJob;
+use App\Jobs\TestSaveFilmJob;
 use App\Models\Film;
 use Illuminate\Http\Request;
 
@@ -58,7 +59,8 @@ class FilmController extends Controller
         ]);
 
         // Создает задачу на добавления фильма
-        SaveFilmJob::dispatch($validatedData['imdb_id']);
+        // SaveFilmJob::dispatch($validatedData['imdb_id']);
+        TestSaveFilmJob::dispatch($validatedData['imdb_id']);
 
         return $this->success([
             'message' => "Добавлена задача на сохранение фильма с ID={$validatedData['imdb_id']}.",
