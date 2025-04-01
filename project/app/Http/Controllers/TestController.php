@@ -3,11 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Jobs\SaveFilmJob;
+use App\Jobs\SendMailJob;
+use App\Mail\SigmaEmail;
 use App\Models\Film;
 use App\Services\class\client\LaravelHttpClient;
 use App\Services\class\FilmRepository;
 use App\Services\class\FilmService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class TestController extends Controller
 {
@@ -26,23 +29,33 @@ class TestController extends Controller
 
     public function test() {}
 
-    public function index(Request $request)
-    {
-        $result = Film::find(1)->getRatingAttribute();
-        var_dump($result);
-        // return $result;
-    }
-
     public function storeFilm(Request $request)
     {
-        // Сохранение без очереди напрямую
+        // 1. Сохранение без очереди напрямую
         $client = new LaravelHttpClient();
         $filmsRepository = new FilmRepository($client);
         $filmService = new FilmService($filmsRepository);
         $film = $filmsRepository->getFilm($request->id);
         $filmService->saveFilm($film);
 
+        // 2. Сохранение при помощи очереди
         // SaveFilmJob::dispatch($request->id);
         // return $this->success(['message' => "Задача на сохранение фильма {$request->id} отправлена в очередь."], 201);
+    }
+
+    public function sendMail()
+    {
+        // 1. Отправка без очереди напрямую
+        // for ($i = 0; $i < 5; $i++) {
+        //     sleep(3);
+        //     Mail::to('dannil.suvorov.98@bk.ru')
+        //         ->send(new SigmaEmail());
+        // }
+
+        // 2. Отправка при помощи очереди
+        SendMailJob::dispatch()->onQueue('email');
+
+        $now = date('d-m-Y H:i:s');
+        echo "Письма успешно отправлены. {$now}";
     }
 }

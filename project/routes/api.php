@@ -96,5 +96,5 @@ Route::controller(PromoController::class)
 
 
 // => MY TEST Routes
-Route::get('/test', [TestController::class, 'index'])->name('test.index');
 Route::get('/test/store/{id}', [TestController::class, 'storeFilm'])->name('test.store');
+Route::post('/test/email', [TestController::class, 'sendMail'])->name('test.email');
