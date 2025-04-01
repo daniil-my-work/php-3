@@ -31,27 +31,28 @@ class SaveFilmJobTest extends TestCase
 
     public function test_save_film_job_saves_data_to_database(): void
     {
-        // Проверка добавления записи в БД
-        $film = Film::factory()->create([
-            "imdb_id" => 'tt0111161',
-            'name' => 'Test Movie',
-        ]);
+        $filmData = [
+            'imdbID' => 'tt12345',
+            'Title' => 'Тест',
+            'Poster' => 'http://test.ru',
+            'Plot' => 'http://test.ru',
+            'Director' => 'Anna',
+            'Actors' => json_encode(["anna", "daniil"]), // Преобразование актёров в JSON
+            'Runtime' => 20, // Извлечение числа из строки
+            'Year' => 2025,
+        ];
 
-        /** @var FilmRepository $filmRepository */
-        $filmRepository = $this->mock(FilmRepository::class, function (MockInterface $mock) use ($film) {
-            $mock->shouldReceive('getFilm')->once()->with('tt0111161')->andReturn($film);
+        /** @var FilmRepository $filmMockRepository */
+        $filmMockRepository = $this->mock(FilmRepository::class, function (MockInterface $mock) use ($filmData) {
+            $mock->shouldReceive('getFilm')->once()->with('tt12345')->andReturn(json_encode($filmData));
         });
 
-        // Используем реальный FilmService
-        $filmService = new FilmService($filmRepository);
+        $filmService = new FilmService($filmMockRepository);
+        (new SaveFilmJob('tt12345'))->handle($filmService);
 
-        /** @var FilmService $filmService */
-        (new SaveFilmJob('tt0111161'))->handle($filmService);
-
-        // Проверка, что фильм был добавлен в БД
         $this->assertDatabaseHas('films', [
-            'imdb_id' => 'tt0111161',
-            'name' => 'Test Movie',
+            'imdb_id' => 'tt12345',
+            'name' => 'Тест'
         ]);
     }
 }

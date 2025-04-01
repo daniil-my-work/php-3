@@ -3,7 +3,6 @@
 namespace App\Jobs;
 
 use App\Models\Film;
-use App\Services\class\FilmService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Foundation\Queue\Queueable;
