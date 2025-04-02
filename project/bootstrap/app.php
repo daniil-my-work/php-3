@@ -20,8 +20,8 @@ return Application::configure(basePath: dirname(__DIR__))
             // ThrottleRequests::class . ':api',
             // SubstituteBindings::class
         ]);
+        $middleware->trustProxies(at: '*');
     })
     ->withSchedule(new ScheduleHandler())
-    ->withExceptions(function (Exceptions $exceptions) {
-    })
+    ->withExceptions(function (Exceptions $exceptions) {})
     ->create();
